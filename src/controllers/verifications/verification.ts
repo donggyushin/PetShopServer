@@ -9,11 +9,12 @@ import random from 'random'
 import { sendSMS } from "../../utils/twilio/twilio";
 
 export const verifyVerification = async (req:Request, res:Response, next:NextFunction):Promise<Response<any>> => {
-  interface Body {
+  interface Query {
     phoneNumber?:string 
     verificationCode?:string
   }
-  const {phoneNumber, verificationCode} = req.body as Body
+  
+  const {phoneNumber, verificationCode} = req.query as Query
   if (!phoneNumber) {
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
       ok:false ,
