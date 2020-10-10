@@ -8,7 +8,64 @@ import VerificationModel, { VerificationType } from "../../models/VerificationMo
 import random from 'random'
 import { sendSMS } from "../../utils/twilio/twilio";
 
-export const postVerification = async (req: Request, res: Response, next: NextFunction) => {
+export const verifyVerification = async (req:Request, res:Response, next:NextFunction):Promise<Response<any>> => {
+  interface Body {
+    phoneNumber?:string 
+    verificationCode?:string
+  }
+  const {phoneNumber, verificationCode} = req.body as Body
+  if (!phoneNumber) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      ok:false ,
+      error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+      message:'핸드폰 번호를 입력해주세요'
+    })
+  }
+
+  const phoneRegExp = /^\d{3}\d{3,4}\d{4}$/;
+ if (!phoneRegExp.test(phoneNumber)) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      ok:false,
+      error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+      message:'잘못된 핸드폰 번호 형식입니다'
+    })
+ }
+
+ const verifications = await VerificationModel.find({
+  phoneNumber
+ }).sort({createdAt:-1})
+ const verification = verifications[0]
+
+ const now = new Date()
+ const expireDate = verification.createdAt
+ expireDate.setSeconds(expireDate.getSeconds() + 180)
+ 
+ if (expireDate < now) {
+   return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+     ok:false,
+     error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+     message:'인증코드의 유효기간이 만료되었습니다. 인증코드를 다시 발급받아주세요'
+   })
+ }
+ 
+
+if (verification.verificationCode !== verificationCode) {
+  return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+    ok:false,
+    error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+    message:'인증 코드의 값이 다릅니다.'
+  })
+}
+
+return res.json({
+  ok:true
+})
+
+ 
+
+}
+
+export const postVerification = async (req: Request, res: Response, next: NextFunction):Promise<Response<any>> => {
  interface Body {
   phoneNumber?:string
  }
