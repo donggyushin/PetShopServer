@@ -15,7 +15,7 @@ switch (environment) {
     break;
 }
 
-mongoose.connect(DB_HOST, { useNewUrlParser: true });
+mongoose.connect(DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "🆘 connection error: "));
