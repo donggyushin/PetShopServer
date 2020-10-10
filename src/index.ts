@@ -1,3 +1,5 @@
+import "./mongoose";
+
 import dotenv from "dotenv";
 import environment from "./env";
 import express from "express";
@@ -14,8 +16,6 @@ switch (environment) {
     PORT = process.env.TEST_PORT;
     break;
 }
-
-app.get("/", (req, res) => res.send("PetShopServer"));
 
 app.listen(PORT, () =>
   console.log(
