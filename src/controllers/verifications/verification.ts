@@ -9,9 +9,8 @@ import random from 'random'
 
 export const postVerification = async (req: Request, res: Response, next: NextFunction) => {
  interface Body {
-  phoneNumber?:String
+  phoneNumber?:string
  }
- console.log("here")
  const {phoneNumber} = req.body as Body
 
  if (phoneNumber === undefined) {
@@ -22,7 +21,16 @@ export const postVerification = async (req: Request, res: Response, next: NextFu
   })
  }
 
- // TODO: 핸드폰 정규식 추가
+ 
+ const phoneRegExp = /^\d{3}\d{3,4}\d{4}$/;
+ if (!phoneRegExp.test(phoneNumber)) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      ok:false,
+      error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+      message:'잘못된 핸드폰 번호 형식입니다'
+    })
+ }
+
 
  const verificationCode = random.int(100000, 999999)
 
@@ -37,8 +45,8 @@ export const postVerification = async (req: Request, res: Response, next: NextFu
 
  
  try{
-  await verification.save()
-
+  const verificationResponse = await verification.save()
+  
   // TODO: 전달받은 핸드폰 번호로 문자메시지 보내기
 
   return res.json({
