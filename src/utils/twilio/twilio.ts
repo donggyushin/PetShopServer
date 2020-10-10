@@ -10,12 +10,12 @@ const fromNumber = process.env.TWILIO_FROM_NUMBER
 
 const client = twilio(accountSid, authToken)
 
-export const sendSMS = async (body:string,  to:string):Promise<MessageInstance> => {
-const message = await client.messages.create({
+export const sendSMS = async (body:string,  to:string):Promise<void> => {
+await client.messages.create({
   body,
   from:fromNumber,
   to
  })
- return message
+ 
 }
 

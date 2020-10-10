@@ -1,15 +1,15 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 interface IVerification extends Document {
-  phoneNumber: String;
-  verificationCode: String;
+  phoneNumber: string;
+  verificationCode: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface VerificationType {
-  phoneNumber: String;
-  verificationCode: String;
+  phoneNumber: string;
+  verificationCode: string;
   createdAt: Date;
   updatedAt: Date;
 }
