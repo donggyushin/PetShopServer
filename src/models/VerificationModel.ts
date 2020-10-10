@@ -7,6 +7,13 @@ interface IVerification extends Document {
   updatedAt: Date;
 }
 
+export interface VerificationType {
+  phoneNumber: String;
+  verificationCode: String;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const VerificationSchema: Schema = new Schema({
   phoneNumber: {
     type: String,

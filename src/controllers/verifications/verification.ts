@@ -1,0 +1,61 @@
+import { NextFunction, Request, Response } from "express";
+import {
+ StatusCodes,
+ getReasonPhrase,
+} from 'http-status-codes';
+import VerificationModel, { VerificationType } from "../../models/VerificationModel";
+
+import random from 'random'
+
+export const postVerification = async (req: Request, res: Response, next: NextFunction) => {
+ interface Body {
+  phoneNumber?:String
+ }
+ console.log("here")
+ const {phoneNumber} = req.body as Body
+
+ if (phoneNumber === undefined) {
+  return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+   ok:false,
+   error:getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+   message: '핸드폰 번호를 입력해주세요'
+  })
+ }
+
+ // TODO: 핸드폰 정규식 추가
+
+ const verificationCode = random.int(100000, 999999)
+
+
+
+ const verification = new VerificationModel({
+   phoneNumber:phoneNumber,
+   verificationCode:verificationCode.toString(),
+   createdAt:new Date(),
+   updatedAt: new Date()
+ } as VerificationType)
+
+ 
+ try{
+  await verification.save()
+
+  // TODO: 전달받은 핸드폰 번호로 문자메시지 보내기
+
+  return res.json({
+   ok:true,
+   verification
+  })
+
+ }catch(err) {
+  console.error(err.message)
+  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+   ok:false,
+   error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+   message:'서버 내부 에러가 발생하였습니다.'
+  })
+ }
+ 
+
+ 
+
+}
