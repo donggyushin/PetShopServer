@@ -50,7 +50,7 @@ export const postVerification = async (req: Request, res: Response, next: NextFu
   
   // TODO: 전달받은 핸드폰 번호로 문자메시지 보내기
   
-  await sendSMS(`보안코드는 ${verificationCode} 입니다. \n 멍샵`, `+82${phoneNumber.substring(1)}`)
+  await sendSMS(`보안코드는 ${verificationCode} 입니다. \n-멍샵`, `+82${phoneNumber.substring(1)}`)
 
   return res.json({
    ok:true,
