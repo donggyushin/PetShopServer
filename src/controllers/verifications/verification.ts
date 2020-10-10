@@ -57,6 +57,10 @@ if (verification.verificationCode !== verificationCode) {
   })
 }
 
+await VerificationModel.deleteMany({
+  phoneNumber
+})
+
 return res.json({
   ok:true
 })
