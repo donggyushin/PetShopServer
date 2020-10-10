@@ -6,6 +6,7 @@ import {
 import VerificationModel, { VerificationType } from "../../models/VerificationModel";
 
 import random from 'random'
+import { sendSMS } from "../../utils/twilio/twilio";
 
 export const postVerification = async (req: Request, res: Response, next: NextFunction) => {
  interface Body {
@@ -45,9 +46,11 @@ export const postVerification = async (req: Request, res: Response, next: NextFu
 
  
  try{
-  const verificationResponse = await verification.save()
+  await verification.save()
   
   // TODO: 전달받은 핸드폰 번호로 문자메시지 보내기
+  
+  await sendSMS(`보안코드는 ${verificationCode} 입니다. \n 멍샵`, `+82${phoneNumber.substring(1)}`)
 
   return res.json({
    ok:true,
