@@ -1,11 +1,11 @@
 import "./mongoose";
 
+import app from "./app";
 import dotenv from "dotenv";
 import environment from "./env";
-import express from "express";
+
 dotenv.config();
 
-const app = express();
 let PORT = process.env.DEV_PORT;
 
 switch (environment) {
