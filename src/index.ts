@@ -15,8 +15,6 @@ switch (environment) {
     break;
 }
 
-app.get("/", (req, res) => res.send("PetShopServer"));
-
 app.listen(PORT, () =>
   console.log(
     `⚡️ [PetShopServer]: Server is running at http://localhost:${PORT}`
