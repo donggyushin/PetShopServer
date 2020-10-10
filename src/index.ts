@@ -1,3 +1,5 @@
+import "./mongoose";
+
 import dotenv from "dotenv";
 import environment from "./env";
 import express from "express";
