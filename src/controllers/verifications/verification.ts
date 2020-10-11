@@ -32,42 +32,48 @@ export const verifyVerification = async (req:Request, res:Response, next:NextFun
     })
  }
 
- const verifications = await VerificationModel.find({
-  phoneNumber
- }).sort({createdAt:-1})
- const verification = verifications[0]
-
- const now = new Date()
- const expireDate = verification.createdAt
- expireDate.setSeconds(expireDate.getSeconds() + 180)
- 
- if (expireDate < now) {
-   return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-     ok:false,
-     error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
-     message:'인증코드의 유효기간이 만료되었습니다. 인증코드를 다시 발급받아주세요'
-   })
- }
- 
-
-if (verification.verificationCode !== verificationCode) {
-  return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-    ok:false,
-    error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
-    message:'인증 코드의 값이 다릅니다.'
+ try{
+  const verifications = await VerificationModel.find({
+    phoneNumber
+   }).sort({createdAt:-1})
+   const verification = verifications[0]
+  
+   const now = new Date()
+   const expireDate = verification.createdAt
+   expireDate.setSeconds(expireDate.getSeconds() + 180)
+   
+   if (expireDate < now) {
+     return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+       ok:false,
+       error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+       message:'인증코드의 유효기간이 만료되었습니다. 인증코드를 다시 발급받아주세요'
+     })
+   }
+   
+  
+  if (verification.verificationCode !== verificationCode) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      ok:false,
+      error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+      message:'인증 코드의 값이 다릅니다.'
+    })
+  }
+  
+  await VerificationModel.deleteMany({
+    phoneNumber
   })
-}
+  
+  return res.json({
+    ok:true
+  })
 
-await VerificationModel.deleteMany({
-  phoneNumber
-})
-
-return res.json({
-  ok:true
-})
-
- 
-
+ }catch(err) {
+  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    ok:false,
+    error: StatusCodes.INTERNAL_SERVER_ERROR,
+    message:'서버 내부 에러가 발생하였습니다.'
+  })
+ }
 }
 
 export const postVerification = async (req: Request, res: Response, next: NextFunction):Promise<Response<any>> => {
