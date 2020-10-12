@@ -71,7 +71,8 @@ export const verifyVerification = async (req:Request, res:Response, next:NextFun
   })
   
   return res.json({
-    ok:true
+    ok:true,
+    verification
   })
 
  }catch(err) {
