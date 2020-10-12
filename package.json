@@ -6,11 +6,13 @@
   "author": "donggyushin",
   "license": "MIT",
   "dependencies": {
+    "@types/cors": "^2.8.8",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.8",
     "@types/mongoose": "^5.7.36",
     "@types/node": "^14.11.8",
     "@types/random": "^2.1.1",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "http-status-codes": "^2.1.4",

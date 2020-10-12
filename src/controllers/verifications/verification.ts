@@ -36,6 +36,13 @@ export const verifyVerification = async (req:Request, res:Response, next:NextFun
   const verifications = await VerificationModel.find({
     phoneNumber
    }).sort({createdAt:-1})
+   if (verifications.length === 0 ){
+     return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+       ok:false,
+       error:getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+       message:'해당 핸드폰 번호에 해당하는 인증 정보가 없습니다. 핸드폰 번호를 다시 확인하고 인증 요청을 다시 진행해주세요'
+     })
+   }
    const verification = verifications[0]
   
    const now = new Date()
