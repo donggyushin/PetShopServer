@@ -6,6 +6,7 @@ interface IUser extends Document {
   createdAt: Date;
   updatedAt: Date;
   profileImage: string;
+  phoneNumber: string;
 }
 
 export interface UserType {
@@ -14,6 +15,7 @@ export interface UserType {
   createdAt: Date;
   updatedAt: Date;
   profileImage: string;
+  phoneNumber: string;
 }
 
 const UserSchema: Schema = new Schema({
@@ -24,6 +26,11 @@ const UserSchema: Schema = new Schema({
   },
   profileImage: {
     type: String,
+  },
+  phoneNumber: {
+    type: String,
+    required: true,
+    unique: true,
   },
   password: {
     type: String,
