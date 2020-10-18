@@ -3,6 +3,41 @@ import { StatusCodes, getReasonPhrase } from "http-status-codes";
 
 import UserModel from "../../models/UserModel";
 
+export const findUserByUserId = async (
+  req: Request,
+  res: Response
+): Promise<Response<any>> => {
+  interface Query {
+    userId?: string;
+  }
+
+  const { userId } = req.query as Query;
+  if (!userId) {
+    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      ok: false,
+      error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+      message: "유저 아이디를 입력하세요",
+    });
+  }
+
+  try {
+    const user = await UserModel.findOne({
+      userId,
+    });
+
+    return res.json({
+      ok: true,
+      user,
+    });
+  } catch (err) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      ok: false,
+      error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+      message: err.message,
+    });
+  }
+};
+
 export const findUserByPhone = async (
   req: Request,
   res: Response

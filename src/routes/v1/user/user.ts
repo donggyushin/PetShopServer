@@ -1,8 +1,13 @@
+import {
+  findUserByPhone,
+  findUserByUserId,
+} from "../../../controllers/users/user";
+
 import express from "express";
-import { findUserByPhone } from "../../../controllers/users/user";
 
 const router = express.Router();
 
 router.get("/phone", findUserByPhone);
+router.get("/userId", findUserByUserId);
 
 export default router;
