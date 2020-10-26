@@ -1,4 +1,5 @@
 import {
+  createNewUser,
   findUserByPhone,
   findUserByUserId,
 } from "../../../controllers/users/user";
@@ -9,5 +10,7 @@ const router = express.Router();
 
 router.get("/phone", findUserByPhone);
 router.get("/userId", findUserByUserId);
+
+router.post("", createNewUser);
 
 export default router;
