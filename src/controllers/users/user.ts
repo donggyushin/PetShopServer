@@ -3,7 +3,7 @@ import * as Util from "../../utils/Utils";
 
 import { Request, Response } from "express";
 import { StatusCodes, getReasonPhrase } from "http-status-codes";
-import UserModel, { UserType } from "../../models/UserModel";
+import UserModel, { Gender, UserType } from "../../models/UserModel";
 
 export const loginUser = async (
   req: Request,
@@ -67,8 +67,19 @@ export const createNewUser = async (
     password?: string;
     nickname?: string;
     phoneNumber?: string;
+    birth?: string;
+    gender?: Gender;
+    profileImage?: string;
   }
-  const { userId, password, nickname, phoneNumber } = req.body as Body;
+  const {
+    userId,
+    password,
+    nickname,
+    phoneNumber,
+    birth,
+    gender,
+    profileImage,
+  } = req.body as Body;
   if (!userId || !password || !nickname || !phoneNumber) {
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
       ok: false,
@@ -120,6 +131,9 @@ export const createNewUser = async (
     phoneNumber,
     createdAt: new Date(),
     updatedAt: new Date(),
+    birth,
+    gender,
+    profileImage,
   };
 
   const newUser = new UserModel(userProperty);

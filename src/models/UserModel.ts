@@ -1,5 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
+export type Gender = "male" | "female";
+
 interface IUser extends Document {
   userId: string;
   password: string;
@@ -8,6 +10,8 @@ interface IUser extends Document {
   profileImage?: string;
   phoneNumber: string;
   nickname: string;
+  birth?: string;
+  gender?: Gender;
 }
 
 export interface UserType {
@@ -18,6 +22,8 @@ export interface UserType {
   profileImage?: string;
   phoneNumber: string;
   nickname: string;
+  birth?: string;
+  gender?: Gender;
 }
 
 const UserSchema: Schema = new Schema({
@@ -48,6 +54,16 @@ const UserSchema: Schema = new Schema({
     type: Date,
     required: true,
     default: Date.now,
+  },
+  nickname: {
+    type: String,
+    required: true,
+  },
+  birth: {
+    type: String,
+  },
+  gender: {
+    type: String,
   },
 });
 
