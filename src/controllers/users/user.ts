@@ -40,7 +40,7 @@ export const loginUser = async (
     if (users[0].userId === userId && users[0].password === password) {
       return res.json({
         ok: true,
-        token: Util.encodeJwt(userId),
+        token: Util.encodeJwt(users[0]._id),
       });
     }
 
