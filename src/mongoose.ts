@@ -4,14 +4,14 @@ import mongoose from "mongoose";
 
 dotenv.config();
 
-let DB_HOST = process.env.DEV_DB || "";
+let DB_HOST = process.env.DEV_DB_CLOUD_MONGO_DB || "";
 
 switch (environment) {
   case "production ":
-    DB_HOST = process.env.PRODUCTION_DB || "";
+    DB_HOST = process.env.PRODUCTION_DB_CLOUD_MONGO_DB || "";
     break;
   case "test":
-    DB_HOST = process.env.TEST_DB || "";
+    DB_HOST = process.env.TEST_DB_CLOUD_MONGO_DB || "";
     break;
 }
 
