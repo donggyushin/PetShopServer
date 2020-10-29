@@ -1,11 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface IVerification extends Document {
-  phoneNumber: string;
-  verificationCode: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+interface IVerification extends Document, VerificationType {}
 
 export interface VerificationType {
   phoneNumber: string;
