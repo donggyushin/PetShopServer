@@ -5,6 +5,7 @@ import VerificationModel, {
 } from "../../models/VerificationModel";
 
 import UserModel from "../../models/UserModel";
+import environment from "../../env";
 import random from "random";
 import { sendSMS } from "../../utils/twilio/twilio";
 
@@ -119,12 +120,15 @@ export const postVerification = async (
     const users = await UserModel.find({
       phoneNumber,
     });
-    if (users.length > 0) {
-      return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-        ok: false,
-        error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
-        message: "이미 사용중인 번호입니다",
-      });
+
+    if (environment === "production ") {
+      if (users.length > 0) {
+        return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+          ok: false,
+          error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+          message: "이미 사용중인 번호입니다",
+        });
+      }
     }
 
     const verificationCode = random.int(100000, 999999);
