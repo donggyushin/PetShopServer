@@ -15,6 +15,7 @@ export type PetType = {
   petSort?: PetSort;
   name: string;
   kind?: string;
+  life?: string;
   personality?: string[];
   photourl?: string;
   gender: Gender;
@@ -54,6 +55,9 @@ const PetSchema: Schema = new Schema({
       min: String,
       max: String,
     },
+  },
+  life: {
+    type: String,
   },
 });
 
