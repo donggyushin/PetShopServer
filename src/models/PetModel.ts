@@ -13,7 +13,7 @@ export type PetType = {
   personality?: string[];
   photourl?: string;
   gender: Gender;
-  birth: String;
+  birth: string;
 };
 
 const PetSchema: Schema = new Schema({

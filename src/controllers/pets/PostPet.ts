@@ -23,7 +23,7 @@ export const postNewPet = async (
     personality?: string[];
     photourl?: string;
     gender: Gender;
-    birth: String;
+    birth: string;
   }
 
   const { authorization } = req.headers as Head;
