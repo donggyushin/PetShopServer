@@ -14,6 +14,7 @@ export interface UserType {
   nickname: string;
   birth?: string;
   gender?: Gender;
+  fcmToken?: string;
 }
 
 const UserSchema: Schema = new Schema({
@@ -53,6 +54,9 @@ const UserSchema: Schema = new Schema({
     type: String,
   },
   gender: {
+    type: String,
+  },
+  fcmToken: {
     type: String,
   },
 });
