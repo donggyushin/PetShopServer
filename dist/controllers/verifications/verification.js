@@ -16,6 +16,7 @@ exports.postVerification = exports.verifyVerification = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const VerificationModel_1 = __importDefault(require("../../models/VerificationModel"));
 const UserModel_1 = __importDefault(require("../../models/UserModel"));
+const env_1 = __importDefault(require("../../env"));
 const random_1 = __importDefault(require("random"));
 const twilio_1 = require("../../utils/twilio/twilio");
 exports.verifyVerification = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -101,12 +102,14 @@ exports.postVerification = (req, res, next) => __awaiter(void 0, void 0, void 0,
         const users = yield UserModel_1.default.find({
             phoneNumber,
         });
-        if (users.length > 0) {
-            return res.status(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY).json({
-                ok: false,
-                error: http_status_codes_1.getReasonPhrase(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY),
-                message: "이미 사용중인 번호입니다",
-            });
+        if (env_1.default === "production ") {
+            if (users.length > 0) {
+                return res.status(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY).json({
+                    ok: false,
+                    error: http_status_codes_1.getReasonPhrase(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY),
+                    message: "이미 사용중인 번호입니다",
+                });
+            }
         }
         const verificationCode = random_1.default.int(100000, 999999);
         const verification = new VerificationModel_1.default({

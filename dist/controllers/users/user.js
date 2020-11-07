@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -13,6 +32,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findUserByPhone = exports.findUserByUserId = exports.createNewUser = exports.loginUser = void 0;
+const Regex = __importStar(require("../../constants/Constants"));
+const Util = __importStar(require("../../utils/Utils"));
 const http_status_codes_1 = require("http-status-codes");
 const UserModel_1 = __importDefault(require("../../models/UserModel"));
 exports.loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -35,10 +56,11 @@ exports.loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 message: "해당 아이디로 존재하는 유저가 없습니다. 아이디를 다시 확인해봐주세요.",
             });
         }
+        // TODO : token을 생성해준다
         if (users[0].userId === userId && users[0].password === password) {
             return res.json({
                 ok: true,
-                token: "token",
+                token: Util.encodeJwt(users[0]._id),
             });
         }
         return res.status(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY).json({
@@ -56,7 +78,7 @@ exports.loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.createNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId, password, nickname, phoneNumber } = req.body;
+    const { userId, password, nickname, phoneNumber, birth, gender, profileImage, } = req.body;
     if (!userId || !password || !nickname || !phoneNumber) {
         return res.status(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY).json({
             ok: false,
@@ -64,25 +86,25 @@ exports.createNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function
             message: "아이디, 비밀번호, 닉네임, 핸드폰번호를 모두 입력해주세요",
         });
     }
-    if (!Util.shared.checkTextValidation(Regex.shared.userIdRegex, userId)) {
+    if (!Util.checkTextValidation(Regex.userIdRegex, userId)) {
         return res.status(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY).json({
             ok: false,
             error: http_status_codes_1.getReasonPhrase(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY),
             message: "유저 아이디가 적절하지 못한 포맷입니다",
         });
     }
-    if (!Util.shared.checkTextValidation(Regex.shared.passwordRegex, password)) {
-        return res.status(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY).json({
-            ok: false,
-            error: http_status_codes_1.getReasonPhrase(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY),
-            message: "비밀번호가 적절하지 못한 포맷입니다",
-        });
-    }
-    if (!Util.shared.checkTextValidation(Regex.shared.nicknameRegex, nickname)) {
+    if (!Util.checkTextValidation(Regex.nicknameRegex, nickname)) {
         return res.status(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY).json({
             ok: false,
             error: http_status_codes_1.getReasonPhrase(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY),
             message: "닉네임이 적절하지 못한 포맷입니다",
+        });
+    }
+    if (!Util.checkTextValidation(Regex.passwordRegex, password)) {
+        return res.status(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY).json({
+            ok: false,
+            error: http_status_codes_1.getReasonPhrase(http_status_codes_1.StatusCodes.UNPROCESSABLE_ENTITY),
+            message: "비밀번호가 적절하지 못한 포맷입니다",
         });
     }
     const existingUSers = yield UserModel_1.default.find({
@@ -102,6 +124,9 @@ exports.createNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function
         phoneNumber,
         createdAt: new Date(),
         updatedAt: new Date(),
+        birth,
+        gender,
+        profileImage,
     };
     const newUser = new UserModel_1.default(userProperty);
     try {
