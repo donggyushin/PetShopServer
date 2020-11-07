@@ -1,10 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-type Price = {
-  min: string;
-  max: string;
-};
-
 type PetSort = "강아지" | "고양이";
 type Gender = "male" | "female";
 
@@ -15,12 +10,10 @@ export type PetType = {
   petSort?: PetSort;
   name: string;
   kind?: string;
-  life?: string;
   personality?: string[];
   photourl?: string;
   gender: Gender;
   birth: String;
-  price: Price;
 };
 
 const PetSchema: Schema = new Schema({
@@ -43,21 +36,15 @@ const PetSchema: Schema = new Schema({
   },
   photourl: {
     type: String,
+    required: true,
   },
   gender: {
     type: String,
+    required: true,
   },
   birth: {
     type: String,
-  },
-  price: {
-    type: {
-      min: String,
-      max: String,
-    },
-  },
-  life: {
-    type: String,
+    required: true,
   },
 });
 
