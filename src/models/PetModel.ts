@@ -1,5 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
+import { bool } from "random";
+
 type PetSort = "강아지" | "고양이";
 type Gender = "male" | "female";
 
@@ -14,12 +16,24 @@ export type PetType = {
   photourl?: string;
   gender: Gender;
   birth: string;
+  photos?: {
+    url: string;
+    favorite: boolean;
+  }[];
 };
 
 const PetSchema: Schema = new Schema({
   userIdentifier: {
     type: String,
     required: true,
+  },
+  photos: {
+    type: [
+      {
+        url: String,
+        favorite: Boolean,
+      },
+    ],
   },
   petSort: {
     type: String,
