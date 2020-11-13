@@ -3,17 +3,18 @@ import mongoose, { Document, Schema } from "mongoose";
 interface INotification extends Document, NotificationType {}
 
 export type NotificationType = {
-  userIdentifier: string;
+  petIdentifier: string;
   userFcmToken?: string;
   name: string;
   dayPeriod?: number;
   isOn: boolean;
   createdAt: Date;
   updatedAt: Date;
+  lastNotified: Date;
 };
 
 const NotificationSchema: Schema = new Schema({
-  userIdentifier: {
+  petIdentifier: {
     type: String,
     required: true,
   },
@@ -36,6 +37,10 @@ const NotificationSchema: Schema = new Schema({
     default: Date.now,
   },
   updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+  lastNotified: {
     type: Date,
     default: Date.now,
   },
