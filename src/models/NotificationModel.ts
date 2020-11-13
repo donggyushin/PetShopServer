@@ -1,11 +1,18 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface INotification extends Document, NotificationType {}
+export interface INotification extends Document, NotificationType {}
+
+export type NotificationName =
+  | "birth"
+  | "mite-eating"
+  | "mite-cover"
+  | "helminthic"
+  | "Dirofilaria-immitis";
 
 export type NotificationType = {
   petIdentifier: string;
   userFcmToken?: string;
-  name: string;
+  name: NotificationName;
   dayPeriod?: number;
   isOn: boolean;
   createdAt: Date;

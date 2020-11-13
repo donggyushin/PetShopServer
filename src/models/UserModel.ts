@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export type Gender = "male" | "female";
 
-interface IUser extends Document, UserType {}
+export interface IUser extends Document, UserType {}
 
 export interface UserType {
   userId: string;
