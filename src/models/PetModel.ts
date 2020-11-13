@@ -1,7 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-import { bool } from "random";
-
 type PetSort = "강아지" | "고양이";
 type Gender = "male" | "female";
 
