@@ -72,7 +72,12 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
         helminthicFunc(notifications, petId, isOn, user, res);
       }
 
-      // 강아지 진드기약 바르는 약 1개월, 먹는약 3개월
+      // 강아지 진드기약 바르는 약 1개월
+      if (notificationName === "mite-cover") {
+        miteCoverFunc(notifications, petId, isOn, user, res);
+      }
+
+      // 강아지 진드기약 먹는약 3개월
 
       // 강아지 심장사상충 1달(치명적일 수 있으니 하이라이트 처리해주기)
 
@@ -94,6 +99,46 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
       ok: false,
       error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
       message: err.message,
+    });
+  }
+};
+
+const miteCoverFunc = async (
+  notifications: INotification[],
+  petId: string,
+  isOn: boolean,
+  user: IUser,
+  res: Response
+) => {
+  const miteCoverNotifications = notifications.filter(
+    (item) => item.name === "mite-cover"
+  );
+  if (miteCoverNotifications.length === 0) {
+    // 기존에 존재하는 알림이 없다면 새로 만들어주고,
+    const ingredient: NotificationType = {
+      petIdentifier: petId,
+      userFcmToken: user.fcmToken || "",
+      name: "mite-cover",
+      isOn,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      lastNotified: new Date(),
+    };
+    const miteCoverNotification = new NotificationModel(ingredient);
+    await miteCoverNotification.save();
+    return res.json({
+      ok: true,
+    });
+  } else {
+    // 이미 존재한다면 수정해준다.
+    const miteCoverNotification = miteCoverNotifications[0];
+    await miteCoverNotification.update({
+      lastNotified: new Date(),
+      userFcmToken: user.fcmToken || "",
+      isOn,
+    });
+    return res.json({
+      ok: true,
     });
   }
 };
