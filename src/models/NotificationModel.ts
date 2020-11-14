@@ -13,11 +13,11 @@ export type NotificationType = {
   petIdentifier: string;
   userFcmToken?: string;
   name: NotificationName;
-  dayPeriod?: number;
+  dayPeriod: number;
   isOn: boolean;
   createdAt: Date;
   updatedAt: Date;
-  lastNotified: Date;
+  firstNotified: Date;
 };
 
 const NotificationSchema: Schema = new Schema({
@@ -47,7 +47,7 @@ const NotificationSchema: Schema = new Schema({
     type: Date,
     default: Date.now,
   },
-  lastNotified: {
+  firstNotified: {
     type: Date,
     default: Date.now,
   },

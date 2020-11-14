@@ -19,9 +19,19 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
     petId: string;
     notificationName: NotificationName;
     isOn: boolean;
+    firstNotifiedYear: string;
+    firstNotifiedMonth: string;
+    firstNotifiedDate: string;
   }
   const { authorization } = req.headers as IHeaders;
-  const { petId, notificationName, isOn } = req.body as IBody;
+  const {
+    petId,
+    notificationName,
+    isOn,
+    firstNotifiedDate,
+    firstNotifiedMonth,
+    firstNotifiedYear,
+  } = req.body as IBody;
 
   if (!authorization) {
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
@@ -44,7 +54,14 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
       });
     }
 
-    if (!petId || !notificationName || !isOn) {
+    if (
+      !petId ||
+      !notificationName ||
+      !isOn ||
+      !firstNotifiedDate ||
+      !firstNotifiedMonth ||
+      !firstNotifiedYear
+    ) {
       return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
         ok: false,
         error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
@@ -69,17 +86,67 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
       // 강아지 파트
       // 강아지 구충제 주기 4개월
       if (notificationName === "helminthic") {
-        helminthicFunc(notifications, petId, isOn, user, res);
+        createOrUpdateFunc(
+          notifications,
+          petId,
+          isOn,
+          user,
+          notificationName,
+          firstNotifiedYear,
+          firstNotifiedMonth,
+          firstNotifiedDate,
+          120,
+          res
+        );
       }
 
       // 강아지 진드기약 바르는 약 1개월
       if (notificationName === "mite-cover") {
-        miteCoverFunc(notifications, petId, isOn, user, res);
+        createOrUpdateFunc(
+          notifications,
+          petId,
+          isOn,
+          user,
+          notificationName,
+          firstNotifiedYear,
+          firstNotifiedMonth,
+          firstNotifiedDate,
+          30,
+          res
+        );
       }
 
       // 강아지 진드기약 먹는약 3개월
+      if (notificationName === "mite-eating") {
+        createOrUpdateFunc(
+          notifications,
+          petId,
+          isOn,
+          user,
+          notificationName,
+          firstNotifiedYear,
+          firstNotifiedMonth,
+          firstNotifiedDate,
+          90,
+          res
+        );
+      }
 
       // 강아지 심장사상충 1달(치명적일 수 있으니 하이라이트 처리해주기)
+      if (notificationName === "Dirofilaria-immitis") {
+        createOrUpdateFunc(
+          notifications,
+          petId,
+          isOn,
+          user,
+          notificationName,
+          firstNotifiedYear,
+          firstNotifiedMonth,
+          firstNotifiedDate,
+          30,
+          res
+        );
+      }
 
       // 아직 준비하지 못한 기능들
       return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
@@ -103,79 +170,48 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
   }
 };
 
-const miteCoverFunc = async (
+const createOrUpdateFunc = async (
   notifications: INotification[],
   petId: string,
   isOn: boolean,
   user: IUser,
+  name: NotificationName,
+  firstNotifiedYear: string,
+  firstNotifiedMonth: string,
+  firstNotifiedDate: string,
+  dayPeriod: number,
   res: Response
 ) => {
-  const miteCoverNotifications = notifications.filter(
-    (item) => item.name === "mite-cover"
+  const filteredNotifications = notifications.filter(
+    (item) => item.name === name
   );
-  if (miteCoverNotifications.length === 0) {
-    // 기존에 존재하는 알림이 없다면 새로 만들어주고,
+  const firstNotified = new Date(
+    `${firstNotifiedYear}-${firstNotifiedMonth}-${firstNotifiedDate}`
+  );
+  if (filteredNotifications.length === 0) {
+    // 기존에 알림이 존재하지 않을때
     const ingredient: NotificationType = {
       petIdentifier: petId,
       userFcmToken: user.fcmToken || "",
-      name: "mite-cover",
+      name,
       isOn,
       createdAt: new Date(),
       updatedAt: new Date(),
-      lastNotified: new Date(),
+      firstNotified,
+      dayPeriod,
     };
-    const miteCoverNotification = new NotificationModel(ingredient);
-    await miteCoverNotification.save();
-    return res.json({
-      ok: true,
-    });
-  } else {
-    // 이미 존재한다면 수정해준다.
-    const miteCoverNotification = miteCoverNotifications[0];
-    await miteCoverNotification.update({
-      lastNotified: new Date(),
-      userFcmToken: user.fcmToken || "",
-      isOn,
-    });
-    return res.json({
-      ok: true,
-    });
-  }
-};
 
-const helminthicFunc = async (
-  notifications: INotification[],
-  petId: string,
-  isOn: boolean,
-  user: IUser,
-  res: Response
-) => {
-  const helminthicnotifications = notifications.filter(
-    (item) => item.name === "helminthic"
-  );
-  if (helminthicnotifications.length === 0) {
-    // 기존에 해당 notification이 없었다면 새로 만들어주기
-    const ingredient: NotificationType = {
-      petIdentifier: petId,
-      userFcmToken: user.fcmToken || "",
-      name: "helminthic",
-      dayPeriod: 120,
-      isOn,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      lastNotified: new Date(),
-    };
-    const helminthicNotification = new NotificationModel(ingredient);
-    await helminthicNotification.save();
+    const miteEatingNotification = new NotificationModel(ingredient);
+    await miteEatingNotification.save();
     return res.json({
       ok: true,
     });
   } else {
-    // 기존에 해당 notification이 있었다면 수정해주기
-    const helminthicnotification = helminthicnotifications[0];
-    await helminthicnotification.update({
-      lastNotified: new Date(),
+    // 기존에 이미 알림이 존재할때
+    const filteredNotification = filteredNotifications[0];
+    await filteredNotification.update({
       userFcmToken: user.fcmToken || "",
+      updatedAt: new Date(),
       isOn,
     });
     return res.json({
