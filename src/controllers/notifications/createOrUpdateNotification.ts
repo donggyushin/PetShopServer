@@ -84,6 +84,23 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
 
     if (pet.petSort === "강아지") {
       // 강아지 파트
+
+      // 강아지 생일 주기 1년
+      if (notificationName === "birth") {
+        createOrUpdateFunc(
+          notifications,
+          petId,
+          isOn,
+          user,
+          notificationName,
+          firstNotifiedYear,
+          firstNotifiedMonth,
+          firstNotifiedDate,
+          365,
+          res
+        );
+      }
+
       // 강아지 구충제 주기 4개월
       if (notificationName === "helminthic") {
         createOrUpdateFunc(
