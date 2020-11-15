@@ -67,7 +67,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
       return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
         ok: false,
         error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
-        message: "제대로 전달받지 못하고 있는 인자가 있습니다",
+        message: `${petId}, ${notificationName}, ${isOn}, ${firstNotifiedDate}, ${firstNotifiedMonth}, ${firstNotifiedYear}`,
       });
     }
 
