@@ -1,3 +1,6 @@
+import NotificationModel, {
+  NotificationType,
+} from "../../models/NotificationModel";
 import PetModel, { PetType } from "../../models/PetModel";
 import { Request, Response } from "express";
 import { StatusCodes, getReasonPhrase } from "http-status-codes";
@@ -67,6 +70,14 @@ export const postNewPet = async (
       });
     }
 
+    const convertedBirth = birth
+      .replace("년", "-")
+      .replace("월", "-")
+      .replace("일", "-")
+      .replace(" ", "");
+
+    const birthDate = new Date(convertedBirth);
+
     const petProperties: PetType = {
       userIdentifier: user._id,
       petSort,
@@ -76,10 +87,26 @@ export const postNewPet = async (
       photourl,
       gender,
       birth,
+      birthDate,
     };
 
     const newPet = await new PetModel(petProperties);
     await newPet.save();
+    const notificationIngredient: NotificationType = {
+      petIdentifier: newPet._id,
+      userFcmToken: user.fcmToken,
+      name: "birth",
+      isOn: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      firstNotified: birthDate,
+      dayPeriod: 365,
+    };
+    const petBirthNotification = await new NotificationModel(
+      notificationIngredient
+    );
+    await petBirthNotification.save();
+
     return res.json({
       ok: true,
     });

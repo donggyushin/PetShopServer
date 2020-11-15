@@ -18,6 +18,7 @@ export type PetType = {
     url: string;
     favorite: boolean;
   }[];
+  birthDate: Date;
 };
 
 const PetSchema: Schema = new Schema({
@@ -57,6 +58,9 @@ const PetSchema: Schema = new Schema({
   birth: {
     type: String,
     required: true,
+  },
+  birthDate: {
+    type: Date,
   },
 });
 
