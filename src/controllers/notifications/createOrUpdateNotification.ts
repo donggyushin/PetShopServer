@@ -104,7 +104,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
 
       // 강아지 구충제 주기 4개월
       if (notificationName === "helminthic") {
-        createOrUpdateFunc(
+        return createOrUpdateFunc(
           notifications,
           petId,
           isOn,
