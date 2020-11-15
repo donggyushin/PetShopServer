@@ -86,10 +86,9 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
 
     if (pet.petSort === "강아지") {
       // 강아지 파트
-
       // 강아지 생일 주기 1년
       if (notificationName === "birth") {
-        createOrUpdateFunc(
+        return createOrUpdateFunc(
           notifications,
           petId,
           isOn,
@@ -221,22 +220,37 @@ const createOrUpdateFunc = async (
     };
 
     const miteEatingNotification = new NotificationModel(ingredient);
-
-    await miteEatingNotification.save();
-    return res.json({
-      ok: true,
-    });
+    try {
+      await miteEatingNotification.save();
+      return res.json({
+        ok: true,
+      });
+    } catch (err) {
+      return res.json({
+        ok: false,
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        message: "알림 변경 실패",
+      });
+    }
   } else {
     // 기존에 이미 알림이 존재할때
     const filteredNotification = filteredNotifications[0];
-    await filteredNotification.updateOne({
-      userFcmToken: user.fcmToken || "",
-      updatedAt: new Date(),
-      isOn,
-    });
-    return res.json({
-      ok: true,
-    });
+    try {
+      await filteredNotification.updateOne({
+        userFcmToken: user.fcmToken || "",
+        updatedAt: new Date(),
+        isOn,
+      });
+      return res.json({
+        ok: true,
+      });
+    } catch (err) {
+      return res.json({
+        ok: false,
+        error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
+        message: "알림 변경 실패",
+      });
+    }
   }
 };
 
