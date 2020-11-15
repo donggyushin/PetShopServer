@@ -114,7 +114,7 @@ export const postNewPet = async (
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       ok: false,
       error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
-      message: "서버에서 알 수 없는 에러가 발생하였습니다",
+      message: err.message,
     });
   }
 };
