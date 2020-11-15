@@ -121,7 +121,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
 
       // 강아지 진드기약 바르는 약 1개월
       if (notificationName === "mite-cover") {
-        createOrUpdateFunc(
+        return createOrUpdateFunc(
           notifications,
           petId,
           isOn,
@@ -137,7 +137,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
 
       // 강아지 진드기약 먹는약 3개월
       if (notificationName === "mite-eating") {
-        createOrUpdateFunc(
+        return createOrUpdateFunc(
           notifications,
           petId,
           isOn,
@@ -153,7 +153,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
 
       // 강아지 심장사상충 1달(치명적일 수 있으니 하이라이트 처리해주기)
       if (notificationName === "Dirofilaria-immitis") {
-        createOrUpdateFunc(
+        return createOrUpdateFunc(
           notifications,
           petId,
           isOn,
@@ -221,6 +221,7 @@ const createOrUpdateFunc = async (
     };
 
     const miteEatingNotification = new NotificationModel(ingredient);
+
     await miteEatingNotification.save();
     return res.json({
       ok: true,
