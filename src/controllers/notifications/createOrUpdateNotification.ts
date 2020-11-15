@@ -228,7 +228,7 @@ const createOrUpdateFunc = async (
   } else {
     // 기존에 이미 알림이 존재할때
     const filteredNotification = filteredNotifications[0];
-    await filteredNotification.update({
+    await filteredNotification.updateOne({
       userFcmToken: user.fcmToken || "",
       updatedAt: new Date(),
       isOn,
