@@ -18,7 +18,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
   interface IBody {
     petId: string;
     notificationName: NotificationName;
-    isOn: boolean;
+    isOn?: boolean;
     firstNotifiedYear: string;
     firstNotifiedMonth: string;
     firstNotifiedDate: string;
@@ -59,7 +59,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
     if (
       !petId ||
       !notificationName ||
-      !isOn ||
+      isOn === undefined ||
       !firstNotifiedDate ||
       !firstNotifiedMonth ||
       !firstNotifiedYear
