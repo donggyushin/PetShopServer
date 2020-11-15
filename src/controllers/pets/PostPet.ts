@@ -73,8 +73,10 @@ export const postNewPet = async (
     const convertedBirth = birth
       .replace("년", "-")
       .replace("월", "-")
-      .replace("일", "-")
-      .replace(" ", "");
+      .replace("일", "")
+      .replace(/ /g, "");
+
+    console.log(convertedBirth);
 
     const birthDate = new Date(convertedBirth);
 
