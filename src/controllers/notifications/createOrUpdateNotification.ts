@@ -240,6 +240,7 @@ const createOrUpdateFunc = async (
         userFcmToken: user.fcmToken || "",
         updatedAt: new Date(),
         isOn,
+        firstNotified,
       });
       return res.json({
         ok: true,
