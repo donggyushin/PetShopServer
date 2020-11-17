@@ -5,11 +5,11 @@ import { getNotificationList } from "../../../controllers/notifications/getNotif
 
 const router = express.Router();
 
+router.get("/list/:petId", getNotificationList);
 router.get(
   "/:petId/:notificationName",
   findNotificationByPetIdAndNotificationName
 );
-router.get("/list/:petId", getNotificationList);
 
 router.post("/createOrUpdate", createOrUpdateNotification);
 
