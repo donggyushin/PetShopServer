@@ -147,7 +147,7 @@ export const createNewUser = async (
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       ok: false,
       error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
-      message: "서버 내부 에러가 발생하였습니다. ",
+      message: "같은 핸드폰 번호로는 회원가입 할 수 없습니다",
     });
   }
 };
