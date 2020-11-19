@@ -2,6 +2,7 @@ import createOrUpdateNotification from "../../../controllers/notifications/creat
 import express from "express";
 import findNotificationByPetIdAndNotificationName from "../../../controllers/notifications/findNotificationByPetIdAndNotificationName";
 import { getNotificationList } from "../../../controllers/notifications/getNotificationList";
+import turnOffNotification from "../../../controllers/notifications/turnOffNotification";
 
 const router = express.Router();
 
@@ -10,6 +11,8 @@ router.get(
   "/:petId/:notificationName",
   findNotificationByPetIdAndNotificationName
 );
+
+router.put("/turnOff", turnOffNotification);
 
 router.post("/createOrUpdate", createOrUpdateNotification);
 
