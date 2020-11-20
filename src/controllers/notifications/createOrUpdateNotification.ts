@@ -2,6 +2,7 @@ import * as Utils from "../../utils/Utils";
 
 import NotificationModel, {
   INotification,
+  MiteNotificationKindType,
   NotificationName,
   NotificationType,
 } from "../../models/NotificationModel";
@@ -22,6 +23,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
     firstNotifiedYear: string;
     firstNotifiedMonth: string;
     firstNotifiedDate: string;
+    type?: MiteNotificationKindType;
   }
   const { authorization } = req.headers as IHeaders;
   const {
@@ -31,6 +33,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
     firstNotifiedDate,
     firstNotifiedMonth,
     firstNotifiedYear,
+    type,
   } = req.body as IBody;
 
   if (!authorization) {
@@ -98,7 +101,8 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
           firstNotifiedMonth,
           firstNotifiedDate,
           365,
-          res
+          res,
+          type
         );
       }
 
@@ -114,7 +118,8 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
           firstNotifiedMonth,
           firstNotifiedDate,
           120,
-          res
+          res,
+          type
         );
       }
 
@@ -130,7 +135,8 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
           firstNotifiedMonth,
           firstNotifiedDate,
           30,
-          res
+          res,
+          type
         );
       }
 
@@ -146,7 +152,8 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
           firstNotifiedMonth,
           firstNotifiedDate,
           90,
-          res
+          res,
+          type
         );
       }
 
@@ -162,7 +169,8 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
           firstNotifiedMonth,
           firstNotifiedDate,
           30,
-          res
+          res,
+          type
         );
       }
 
@@ -198,7 +206,8 @@ const createOrUpdateFunc = async (
   firstNotifiedMonth: string,
   firstNotifiedDate: string,
   dayPeriod: number,
-  res: Response
+  res: Response,
+  type?: MiteNotificationKindType
 ) => {
   const filteredNotifications = notifications.filter(
     (item) => item.name === name
@@ -217,6 +226,7 @@ const createOrUpdateFunc = async (
       updatedAt: new Date(),
       firstNotified,
       dayPeriod,
+      type,
     };
 
     const miteEatingNotification = new NotificationModel(ingredient);
@@ -241,6 +251,7 @@ const createOrUpdateFunc = async (
         updatedAt: new Date(),
         isOn,
         firstNotified,
+        type,
       });
       return res.json({
         ok: true,
