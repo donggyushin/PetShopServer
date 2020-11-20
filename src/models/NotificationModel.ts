@@ -2,6 +2,8 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface INotification extends Document, NotificationType {}
 
+export type MiteNotificationKindType = "eat" | "cover";
+
 export type NotificationName =
   | "birth"
   | "mite-eating"
@@ -18,6 +20,7 @@ export type NotificationType = {
   createdAt: Date;
   updatedAt: Date;
   firstNotified: Date;
+  type?: MiteNotificationKindType;
 };
 
 const NotificationSchema: Schema = new Schema({
@@ -50,6 +53,9 @@ const NotificationSchema: Schema = new Schema({
   firstNotified: {
     type: Date,
     default: Date.now,
+  },
+  type: {
+    type: String,
   },
 });
 
