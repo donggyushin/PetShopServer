@@ -45,7 +45,7 @@ export const postPetPhotos = async (
       favorite: boolean;
     }[];
 
-    const photos: Photos = [];
+    const photos = pet.photos || [];
 
     petPhotoUrl!.map((url) => {
       photos.push({
@@ -60,6 +60,7 @@ export const postPetPhotos = async (
 
     return res.json({
       ok: true,
+      photos,
     });
   } catch (err) {
     console.log(err.message);
