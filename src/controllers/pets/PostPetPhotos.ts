@@ -48,7 +48,7 @@ export const postPetPhotos = async (
     const photos = pet.photos || [];
 
     petPhotoUrl!.map((url) => {
-      photos.push({
+      photos.unshift({
         url,
         favorite: false,
       });
