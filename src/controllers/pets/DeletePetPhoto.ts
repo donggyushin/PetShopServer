@@ -25,9 +25,11 @@ export const deletePetPhoto = async (req: Request, res: Response) => {
     }
 
     const petPhotos = pet.photos || [];
-    const updatedPetPhotos = petPhotos.filter(
-      (photo) => photo._id !== petPhotoId
-    );
+    const updatedPetPhotos = petPhotos.filter((photo) => {
+      console.log("photo id: ", photo._id);
+      console.log("petPhoto id: ", petPhotoId);
+      return photo._id !== petPhotoId;
+    });
 
     await pet.updateOne({
       photos: updatedPetPhotos,
