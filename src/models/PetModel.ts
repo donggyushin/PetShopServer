@@ -1,4 +1,8 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, {
+  Document,
+  MongooseDocumentOptionals,
+  Schema,
+} from "mongoose";
 
 type PetSort = "강아지" | "고양이";
 type Gender = "male" | "female";
@@ -15,7 +19,7 @@ export type PetType = {
   gender: Gender;
   birth: string;
   photos?: {
-    _id?: string;
+    _id?: MongooseDocumentOptionals["id"];
     url: string;
     favorite: boolean;
   }[];
