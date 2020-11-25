@@ -19,7 +19,7 @@ export type PetType = {
   gender: Gender;
   birth: string;
   photos?: {
-    _id?: MongooseDocumentOptionals["id"];
+    _id?: string;
     url: string;
     favorite: boolean;
   }[];

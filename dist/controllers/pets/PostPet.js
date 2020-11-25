@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postNewPet = void 0;
+const NotificationModel_1 = __importDefault(require("../../models/NotificationModel"));
 const PetModel_1 = __importDefault(require("../../models/PetModel"));
 const http_status_codes_1 = require("http-status-codes");
 const UserModel_1 = __importDefault(require("../../models/UserModel"));
@@ -45,6 +46,13 @@ exports.postNewPet = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 message: "유효하지 않은 유저입니다",
             });
         }
+        const convertedBirth = birth
+            .replace("년", "-")
+            .replace("월", "-")
+            .replace("일", "")
+            .replace(/ /g, "");
+        console.log(convertedBirth);
+        const birthDate = new Date(convertedBirth);
         const petProperties = {
             userIdentifier: user._id,
             petSort,
@@ -54,9 +62,22 @@ exports.postNewPet = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             photourl,
             gender,
             birth,
+            birthDate,
         };
         const newPet = yield new PetModel_1.default(petProperties);
         yield newPet.save();
+        const notificationIngredient = {
+            petIdentifier: newPet._id,
+            userFcmToken: user.fcmToken,
+            name: "birth",
+            isOn: true,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            firstNotified: birthDate,
+            dayPeriod: 365,
+        };
+        const petBirthNotification = yield new NotificationModel_1.default(notificationIngredient);
+        yield petBirthNotification.save();
         return res.json({
             ok: true,
         });
@@ -65,7 +86,7 @@ exports.postNewPet = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
             ok: false,
             error: http_status_codes_1.getReasonPhrase(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR),
-            message: "서버에서 알 수 없는 에러가 발생하였습니다",
+            message: err.message,
         });
     }
 });

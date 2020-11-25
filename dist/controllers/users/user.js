@@ -139,7 +139,7 @@ exports.createNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function
         return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
             ok: false,
             error: http_status_codes_1.getReasonPhrase(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR),
-            message: "서버 내부 에러가 발생하였습니다. ",
+            message: "같은 핸드폰 번호로는 회원가입 할 수 없습니다",
         });
     }
 });

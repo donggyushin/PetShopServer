@@ -25,6 +25,14 @@ const PetSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    photos: {
+        type: [
+            {
+                url: String,
+                favorite: Boolean,
+            },
+        ],
+    },
     petSort: {
         type: String,
     },
@@ -49,6 +57,9 @@ const PetSchema = new mongoose_1.Schema({
     birth: {
         type: String,
         required: true,
+    },
+    birthDate: {
+        type: Date,
     },
 });
 exports.default = mongoose_1.default.model("Pet", PetSchema);

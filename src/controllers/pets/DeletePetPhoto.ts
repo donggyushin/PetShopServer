@@ -16,7 +16,7 @@ export const deletePetPhoto = async (req: Request, res: Response) => {
 
   try {
     const pet = await PetModel.findById(petId);
-    pet.id;
+
     if (!pet) {
       return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
         ok: false,
@@ -27,7 +27,7 @@ export const deletePetPhoto = async (req: Request, res: Response) => {
 
     const petPhotos = pet.photos || [];
     const updatedPetPhotos = petPhotos.filter((photo) => {
-      return photo._id.toString() !== petPhotoId.toString();
+      return photo._id?.toString() !== petPhotoId.toString();
     });
 
     await pet.updateOne({
