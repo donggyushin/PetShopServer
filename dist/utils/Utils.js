@@ -22,14 +22,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendPushNotification = exports.decodeToken = exports.encodeJwt = exports.checkTextValidation = void 0;
+exports.sendPushNotificationWithMessage = exports.sendPushNotification = exports.decodeToken = exports.encodeJwt = exports.checkTextValidation = void 0;
 const admin = __importStar(require("firebase-admin"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const serviceAccount = require("../../keys/petmily-dab67-firebase-adminsdk-rorl7-151d8b8daf.json");
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-});
 dotenv_1.default.config();
 exports.checkTextValidation = (regex, text) => {
     return regex.test(text);
@@ -65,4 +61,26 @@ exports.sendPushNotification = (message, token, data, title) => {
         .catch((err) => {
         console.log("Error sending message: ", err);
     });
+};
+exports.sendPushNotificationWithMessage = (notification, day7Message, day1Message, todayMessage) => {
+    const today = new Date();
+    const firstNotified = notification.firstNotified;
+    const dayPeried = notification.dayPeriod;
+    const greaterDay = today > firstNotified ? today : firstNotified;
+    const smallerDay = today > firstNotified ? firstNotified : today;
+    const diff = greaterDay.getTime() - smallerDay.getTime();
+    const dayDiff = diff / (1000 * 60 * 60 * 24);
+    const leftDayUntilNotification = dayDiff / dayPeried;
+    if (leftDayUntilNotification < 1) {
+        const leftDayUntilNotification = dayDiff % dayPeried;
+        if (leftDayUntilNotification === 7) {
+            exports.sendPushNotification(day7Message, notification.userFcmToken, {});
+        }
+        else if (leftDayUntilNotification === 1) {
+            exports.sendPushNotification(day1Message, notification.userFcmToken, {});
+        }
+        else if (leftDayUntilNotification === 0) {
+            exports.sendPushNotification(todayMessage, notification.userFcmToken, {});
+        }
+    }
 };

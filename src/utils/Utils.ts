@@ -4,12 +4,6 @@ import { INotification } from "../models/NotificationModel";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 
-const serviceAccount = require("../../keys/petmily-dab67-firebase-adminsdk-rorl7-151d8b8daf.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
 dotenv.config();
 
 export const checkTextValidation = (regex: RegExp, text: string) => {

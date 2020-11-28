@@ -75,6 +75,7 @@ exports.postNewPet = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             updatedAt: new Date(),
             firstNotified: birthDate,
             dayPeriod: 365,
+            petName: name,
         };
         const petBirthNotification = yield new NotificationModel_1.default(notificationIngredient);
         yield petBirthNotification.save();

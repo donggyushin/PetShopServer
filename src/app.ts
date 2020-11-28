@@ -1,4 +1,4 @@
-import * as Push from "./push/index";
+import * as PushApp from "./push/index";
 
 import ApiIndexRouter from "./routes";
 import cors from "cors";
@@ -10,6 +10,6 @@ app.use(express.json());
 app.use(cors());
 app.use("/api", ApiIndexRouter);
 
-Push.dailyPushNotification();
+PushApp.dailyPushNotification();
 
 export default app;
