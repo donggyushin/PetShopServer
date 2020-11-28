@@ -103,6 +103,7 @@ export const postNewPet = async (
       updatedAt: new Date(),
       firstNotified: birthDate,
       dayPeriod: 365,
+      petName: name,
     };
     const petBirthNotification = await new NotificationModel(
       notificationIngredient

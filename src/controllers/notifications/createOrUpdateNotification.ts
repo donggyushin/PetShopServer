@@ -102,6 +102,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
           firstNotifiedDate,
           365,
           res,
+          pet.name,
           type
         );
       }
@@ -119,6 +120,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
           firstNotifiedDate,
           120,
           res,
+          pet.name,
           type
         );
       }
@@ -136,6 +138,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
           firstNotifiedDate,
           30,
           res,
+          pet.name,
           type
         );
       }
@@ -153,6 +156,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
           firstNotifiedDate,
           90,
           res,
+          pet.name,
           type
         );
       }
@@ -170,6 +174,7 @@ const createOrUpdateNotification = async (req: Request, res: Response) => {
           firstNotifiedDate,
           30,
           res,
+          pet.name,
           type
         );
       }
@@ -207,6 +212,7 @@ const createOrUpdateFunc = async (
   firstNotifiedDate: string,
   dayPeriod: number,
   res: Response,
+  petName: string,
   type?: MiteNotificationKindType
 ) => {
   const filteredNotifications = notifications.filter(
@@ -227,6 +233,7 @@ const createOrUpdateFunc = async (
       firstNotified,
       dayPeriod,
       type,
+      petName,
     };
 
     const miteEatingNotification = new NotificationModel(ingredient);

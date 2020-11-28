@@ -11,6 +11,12 @@ export type NotificationName =
   | "helminthic"
   | "Dirofilaria-immitis";
 
+// 생일
+// 먹는 진드기약
+// 바르는 진드기약
+// 기생충약
+// 심장사상충 약
+
 export type NotificationType = {
   petIdentifier: string;
   userFcmToken?: string;
@@ -21,6 +27,7 @@ export type NotificationType = {
   updatedAt: Date;
   firstNotified: Date;
   type?: MiteNotificationKindType;
+  petName: string;
 };
 
 const NotificationSchema: Schema = new Schema({
@@ -55,6 +62,9 @@ const NotificationSchema: Schema = new Schema({
     default: Date.now,
   },
   type: {
+    type: String,
+  },
+  petName: {
     type: String,
   },
 });
