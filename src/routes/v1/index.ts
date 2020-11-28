@@ -10,6 +10,6 @@ ApiV1Router.use("/verification", verification);
 ApiV1Router.use("/user", user);
 ApiV1Router.use("/pet", pet);
 ApiV1Router.use("/notification", notification);
-ApiV1Router.use("dailyInfo", dailyInfo);
+ApiV1Router.use("/dailyInfo", dailyInfo);
 
 export default ApiV1Router;
