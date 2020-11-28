@@ -1,4 +1,3 @@
-import * as Regex from "../../constants/Constants";
 import * as Util from "../../utils/Utils";
 
 import { Request, Response } from "express";
@@ -88,29 +87,29 @@ export const createNewUser = async (
     });
   }
 
-  if (!Util.checkTextValidation(Regex.userIdRegex, userId)) {
-    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-      ok: false,
-      error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
-      message: "유저 아이디가 적절하지 못한 포맷입니다",
-    });
-  }
+  // if (!Util.checkTextValidation(Regex.userIdRegex, userId)) {
+  //   return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+  //     ok: false,
+  //     error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+  //     message: "유저 아이디가 적절하지 못한 포맷입니다",
+  //   });
+  // }
 
-  if (!Util.checkTextValidation(Regex.nicknameRegex, nickname)) {
-    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-      ok: false,
-      error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
-      message: "닉네임이 적절하지 못한 포맷입니다",
-    });
-  }
+  // if (!Util.checkTextValidation(Regex.nicknameRegex, nickname)) {
+  //   return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+  //     ok: false,
+  //     error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+  //     message: "닉네임이 적절하지 못한 포맷입니다",
+  //   });
+  // }
 
-  if (!Util.checkTextValidation(Regex.passwordRegex, password)) {
-    return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-      ok: false,
-      error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
-      message: "비밀번호가 적절하지 못한 포맷입니다",
-    });
-  }
+  // if (!Util.checkTextValidation(Regex.passwordRegex, password)) {
+  //   return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+  //     ok: false,
+  //     error: getReasonPhrase(StatusCodes.UNPROCESSABLE_ENTITY),
+  //     message: "비밀번호가 적절하지 못한 포맷입니다",
+  //   });
+  // }
 
   const existingUSers = await UserModel.find({
     userId,
