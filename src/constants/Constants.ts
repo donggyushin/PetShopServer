@@ -143,7 +143,7 @@ export const Petlist: PetListType[] = [
   },
   {
     petSort: "강아지",
-    name: "대동세",
+    name: "동세대",
     life: "??",
     personality: [
       "친근한",
